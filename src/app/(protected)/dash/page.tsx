@@ -1,9 +1,10 @@
-import { SignoutButton } from './Nav'
+import { Nav } from './Nav'
 
 const DashPage = () => {
   return (
     <div>
-      <SignoutButton />
+      <Nav title='Repos' />
+      <main>repos list here</main>
     </div>
   )
 }
