@@ -1,4 +1,4 @@
-import { supabase } from './clients/public'
+import { supabase } from './clients/browser'
 
 /**
  * Test Supabase connection and return connection status

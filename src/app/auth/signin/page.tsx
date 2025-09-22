@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { supabase } from '@/lib/clients/public'
+import { supabase } from '@/lib/clients/browser'
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -158,7 +158,7 @@ export default function SignInPage() {
             <Button
               type='submit'
               className='w-full'
-              disabled={isLoading}
+              loading={isLoading}
             >
               {isLoading ? 'Signing In...' : 'Sign In'}
             </Button>

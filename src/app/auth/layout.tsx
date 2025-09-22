@@ -9,7 +9,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (user) {
       if (user.email_confirmed_at) {
-        redirect('/app')
+        redirect('/dash')
       } else {
         redirect('/auth/check-email')
       }
