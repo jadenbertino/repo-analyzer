@@ -122,7 +122,7 @@ export type Database = {
           owner: string
           status: string
           updated_at: string
-          user_id: number
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -131,7 +131,7 @@ export type Database = {
           owner: string
           status: string
           updated_at?: string
-          user_id: number
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -140,33 +140,7 @@ export type Database = {
           owner?: string
           status?: string
           updated_at?: string
-          user_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "repo_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user: {
-        Row: {
-          created_at: string
-          email: string
-          id: number
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: number
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: number
+          user_id?: string
         }
         Relationships: []
       }

@@ -21,7 +21,7 @@ const Nav = ({ title }: { title: string }) => {
 }
 
 const UserDropdown = () => {
-  const { user, signOut, isLoading } = useAuthContext()
+  const { user, signOut } = useAuthContext()
 
   return (
     <Popover className='relative'>
@@ -41,12 +41,14 @@ const UserDropdown = () => {
             <p className='text-sm text-gray-600 dark:text-gray-300 truncate'>
               {user?.email}
             </p>
+            <p className='text-xs text-gray-500 dark:text-gray-400 truncate mt-1'>
+              ID: {user?.id}
+            </p>
           </div>
 
           <Button
             variant='outline'
             size='sm'
-            loading={isLoading}
             onClick={signOut}
             className='w-full'
           >

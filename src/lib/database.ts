@@ -21,19 +21,11 @@ const RepoSchema = {
   Row: _.publicRepoRowSchema,
   Insert: _.publicRepoInsertSchema,
   Update: _.publicRepoUpdateSchema,
-  Relationships: _.publicRepoRelationshipsSchema,
 }
 type Repo = z.infer<typeof RepoSchema.Row>
 
-const UserSchema = {
-  Row: _.publicUserRowSchema,
-  Insert: _.publicUserInsertSchema,
-  Update: _.publicUserUpdateSchema,
-}
-type User = z.infer<typeof UserSchema.Row>
-
 // Schema exports
-export { CodeHighlightSchema, CodeIssueSchema, RepoSchema, UserSchema }
+export { CodeHighlightSchema, CodeIssueSchema, RepoSchema }
 
 // Type exports
-export type { CodeHighlight, CodeIssue, Repo, User }
+export type { CodeHighlight, CodeIssue, Repo }

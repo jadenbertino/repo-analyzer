@@ -1,3 +1,4 @@
+import { Repo } from '@/lib/database'
 import { cn } from '@/lib/utils'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { EllipsisVertical } from 'lucide-react'
@@ -11,18 +12,18 @@ export type RepoStatus =
   | 'Error'
   | 'Archived'
 
-export interface RepoItemType {
-  id: number
-  url: string
-  owner: string
-  name: string
-  owner_name: string
-  user_id: string
-  status: RepoStatus
-  updated_at: string
-}
+// export interface RepoItemType {
+//   id: number
+//   url: string
+//   owner: string
+//   name: string
+//   owner_name: string
+//   user_id: string
+//   status: RepoStatus
+//   updated_at: string
+// }
 
-export default function RepoItem({ repo }: { repo: RepoItemType }) {
+export default function RepoItem({ repo }: { repo: Repo }) {
   return (
     <div className='flex items-center justify-between gap-x-6 py-5'>
       <div className='min-w-0'>
@@ -49,12 +50,12 @@ export default function RepoItem({ repo }: { repo: RepoItemType }) {
               cy={1}
             />
           </svg>
-          <p className='truncate'>Owner: {repo.owner_name}</p>
+          <p className='truncate'>Owner: {repo.owner}</p>
         </div>
       </div>
       <div className='flex flex-none items-center gap-x-4'>
         <a
-          href={repo.url}
+          // href={repo.}
           className='hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 sm:block dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20'
         >
           View repo<span className='sr-only'>, {repo.name}</span>
@@ -89,7 +90,7 @@ export default function RepoItem({ repo }: { repo: RepoItemType }) {
   )
 }
 
-function RepoStatusBadge({ status }: { status: RepoStatus }) {
+function RepoStatusBadge({ status }: { status: string }) {
   const statusStyles: Record<RepoStatus, string> = useMemo(
     () => ({
       Importing:
@@ -111,7 +112,7 @@ function RepoStatusBadge({ status }: { status: RepoStatus }) {
     <p
       className={cn(
         'mt-0.5 rounded-md px-2 py-0.5 text-xs font-medium inset-ring',
-        statusStyles[status],
+        statusStyles?.[status as RepoStatus],
       )}
     >
       {status}

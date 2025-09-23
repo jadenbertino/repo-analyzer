@@ -110,7 +110,7 @@ export const publicRepoRowSchema = z.object({
   owner: z.string(),
   status: z.string(),
   updated_at: z.string(),
-  user_id: z.number(),
+  user_id: z.string(),
 });
 
 export const publicRepoInsertSchema = z.object({
@@ -120,7 +120,7 @@ export const publicRepoInsertSchema = z.object({
   owner: z.string(),
   status: z.string(),
   updated_at: z.string().optional(),
-  user_id: z.number(),
+  user_id: z.string(),
 });
 
 export const publicRepoUpdateSchema = z.object({
@@ -130,33 +130,5 @@ export const publicRepoUpdateSchema = z.object({
   owner: z.string().optional(),
   status: z.string().optional(),
   updated_at: z.string().optional(),
-  user_id: z.number().optional(),
-});
-
-export const publicRepoRelationshipsSchema = z.tuple([
-  z.object({
-    foreignKeyName: z.literal("repo_user_id_fkey"),
-    columns: z.tuple([z.literal("user_id")]),
-    isOneToOne: z.literal(false),
-    referencedRelation: z.literal("user"),
-    referencedColumns: z.tuple([z.literal("id")]),
-  }),
-]);
-
-export const publicUserRowSchema = z.object({
-  created_at: z.string(),
-  email: z.string(),
-  id: z.number(),
-});
-
-export const publicUserInsertSchema = z.object({
-  created_at: z.string().optional(),
-  email: z.string(),
-  id: z.number().optional(),
-});
-
-export const publicUserUpdateSchema = z.object({
-  created_at: z.string().optional(),
-  email: z.string().optional(),
-  id: z.number().optional(),
+  user_id: z.string().optional(),
 });

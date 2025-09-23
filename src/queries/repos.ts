@@ -15,6 +15,7 @@ const QUERY_OPTIONS = {
     queryOptions({
       queryKey: QUERY_KEYS.byUserId(q),
       queryFn: () => getRepos(q),
+      enabled: !!q.userId,
     }),
 }
 

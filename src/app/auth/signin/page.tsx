@@ -1,7 +1,5 @@
 'use client'
 
-import Link from 'next/link'
-import { FormEvent, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -14,6 +12,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuthContext } from '@/hooks/useAuthContext'
+import Link from 'next/link'
+import { FormEvent, useState } from 'react'
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -144,7 +144,6 @@ export default function SignInPage() {
             <Button
               type='submit'
               className='w-full'
-              loading={isLoading}
             >
               {isLoading ? 'Signing In...' : 'Sign In'}
             </Button>

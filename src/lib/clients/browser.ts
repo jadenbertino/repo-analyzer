@@ -1,9 +1,10 @@
 import type { LogLevel } from '@/env/client'
 import { CLIENT_ENV, LOG_LEVELS } from '@/env/client'
 import { createClient } from '@supabase/supabase-js'
+import { Database } from '../database.types'
 import { serialize } from '../utils'
 
-const supabase = createClient(
+const supabase = createClient<Database>(
   CLIENT_ENV.SUPABASE_URL,
   CLIENT_ENV.SUPABASE_PUBLIC_KEY,
 )
