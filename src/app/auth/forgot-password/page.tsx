@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useAuthContext } from '@/hooks/useAuthContext'
 import Link from 'next/link'
 import { FormEvent, useState } from 'react'
 
@@ -23,6 +24,7 @@ export default function ForgotPasswordPage() {
   const [validationErrors, setValidationErrors] = useState({
     email: '',
   })
+  const { sendPasswordReset } = useAuthContext()
 
   const validateForm = () => {
     const errors = { email: '' }
@@ -50,12 +52,8 @@ export default function ForgotPasswordPage() {
     setIsLoading(true)
 
     try {
-      // TODO: Implement actual forgot password logic
       console.log('Forgot password data:', formData)
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
+      await sendPasswordReset(formData.email)
       setIsSubmitted(true)
     } catch (error) {
       console.error('Error sending reset email:', error)

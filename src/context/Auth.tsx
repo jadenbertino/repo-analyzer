@@ -19,6 +19,8 @@ type AuthContextType = {
   user: User | null
   signOut: () => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
+  sendPasswordReset: (email: string) => Promise<void>
+  updatePassword: (password: string) => Promise<void>
 } & UseAsyncOperationState
 
 const defaultAuthContext: AuthContextType = {
@@ -28,6 +30,8 @@ const defaultAuthContext: AuthContextType = {
   error: null,
   signOut: async () => {},
   signIn: async () => {},
+  sendPasswordReset: async () => {},
+  updatePassword: async () => {},
 }
 
 const AuthContext = createContext<AuthContextType>(defaultAuthContext)
@@ -99,6 +103,28 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     [router, supabase],
   )
 
+  const sendPasswordReset = useCallback(
+    async (email: string) => {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        // redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/update-password`,
+      })
+      if (error) {
+        throw error
+      }
+    },
+    [supabase],
+  )
+
+  const updatePassword = useCallback(
+    async (password: string) => {
+      const { error } = await supabase.auth.updateUser({ password })
+      if (error) {
+        throw error
+      }
+    },
+    [supabase],
+  )
+
   const value: AuthContextType = {
     user,
     isLoading,
@@ -106,6 +132,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     error,
     signOut,
     signIn,
+    sendPasswordReset,
+    updatePassword,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
