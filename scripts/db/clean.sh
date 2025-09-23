@@ -4,10 +4,10 @@
 # This helps keep migration files clean and consistent
 
 # Set script directory and source logger
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-source "$SCRIPT_DIR/logger.sh"
+source "$(dirname "$0")/../logger.sh"
 
 # Configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 MIGRATIONS_DIR="$SCRIPT_DIR/../supabase/migrations"
 BACKUP_DIR="$SCRIPT_DIR/../.backups/migrations"
 

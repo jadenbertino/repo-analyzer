@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:sync": "bash ./scripts/inject.sh bash ./scripts/db-sync.sh",
-    "db:migrate": "bash scripts/db/migrate.sh"
+    "db:migrate": "bash scripts/db/migrate.sh",
+    "db:types": "bash scripts/db/types.sh"
   },
   "dependencies": {
     "@headlessui/react": "2.2.8",
