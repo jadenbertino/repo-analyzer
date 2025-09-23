@@ -1,9 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { FormEvent, useState } from 'react'
-
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -15,7 +13,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { supabase } from '@/lib/clients/browser'
+import { useAuthContext } from '@/hooks/useAuthContext'
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -28,7 +26,7 @@ export default function SignInPage() {
     email: '',
     password: '',
   })
-  const router = useRouter()
+  const { signIn } = useAuthContext()
 
   const validateForm = () => {
     const errors = { email: '', password: '' }
@@ -62,19 +60,7 @@ export default function SignInPage() {
     setError(null)
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      })
-
-      if (error) {
-        throw error
-      }
-
-      if (data.user) {
-        // Redirect to dashboard or home page
-        router.push('/')
-      }
+      await signIn(formData.email, formData.password)
     } catch (error: unknown) {
       setError(
         error instanceof Error ? error.message : 'An unexpected error occurred',

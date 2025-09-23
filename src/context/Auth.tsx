@@ -6,6 +6,7 @@ import {
 } from '@/hooks/useAsyncOperation'
 import { supabase } from '@/lib/clients/browser'
 import { AuthError, Session, User } from '@supabase/supabase-js'
+import { useRouter } from 'next/navigation'
 import {
   createContext,
   ReactNode,
@@ -17,6 +18,7 @@ import {
 type AuthContextType = {
   user: User | null
   signOut: () => Promise<void>
+  signIn: (email: string, password: string) => Promise<void>
 } & UseAsyncOperationState
 
 const defaultAuthContext: AuthContextType = {
@@ -25,6 +27,7 @@ const defaultAuthContext: AuthContextType = {
   isError: false,
   error: null,
   signOut: async () => {},
+  signIn: async () => {},
 }
 
 const AuthContext = createContext<AuthContextType>(defaultAuthContext)
@@ -35,6 +38,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AuthContextType['user']>(
     defaultAuthContext.user,
   )
+  const router = useRouter()
 
   const handleSessionChange = useCallback(
     (session: Session | null, error?: AuthError | null) => {
@@ -76,12 +80,32 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     await supabase.auth.signOut()
   }, [])
 
+  const signIn = useCallback(
+    async (email: string, password: string) => {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        throw error
+      }
+
+      if (data.user) {
+        // Redirect to dashboard or home page
+        router.push('/')
+      }
+    },
+    [router, supabase],
+  )
+
   const value: AuthContextType = {
     user,
     isLoading,
     isError,
     error,
     signOut,
+    signIn,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
