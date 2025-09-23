@@ -6,7 +6,8 @@
     "dev": "bash ./scripts/dev.sh",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:sync": "bash ./scripts/inject.sh bash ./scripts/db-sync.sh"
   },
   "dependencies": {
     "@headlessui/react": "2.2.8",
