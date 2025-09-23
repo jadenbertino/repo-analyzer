@@ -21,5 +21,5 @@ if ls supabase/migrations/*$FILENAME* 1> /dev/null 2>&1; then
     log_info "Migration file detected with pattern '$FILENAME'. Resetting DB again…"
     bash ./scripts/clean-migrations.sh
     supabase db reset
-    echo "⚠️  A migration file containing '$FILENAME' was created. Please review and commit this file to your repository."
+    log_notice "A migration file containing '$FILENAME' was created. Please review and commit this file to your repository."
 fi
