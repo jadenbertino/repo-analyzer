@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "bash ./scripts/dev.sh",
+    "dev": "bash ./scripts/inject.sh next dev",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",

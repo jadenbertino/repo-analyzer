@@ -39,8 +39,6 @@ function Button({
   variant,
   size,
   asChild = false,
-  loading = false,
-  showLoadingSpinner = true,
   children,
   ...props
 }: React.ComponentProps<'button'> &
@@ -55,10 +53,8 @@ function Button({
     <Comp
       data-slot='button'
       className={cn(buttonVariants({ variant, size, className }))}
-      disabled={loading}
       {...props}
     >
-      {loading && showLoadingSpinner && <LoadingSpinner />}
       {children}
     </Comp>
   )
