@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "eslint",
     "db:sync": "bash ./scripts/inject.sh bash ./scripts/db-sync.sh",
-    "db:types": "bash scripts/db/types.sh",
     "db:migrate": "bash scripts/db/migrate.sh"
   },
   "dependencies": {
