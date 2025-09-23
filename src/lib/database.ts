@@ -1,6 +1,10 @@
 import { z } from 'zod'
 import * as _ from './_database'
 
+// =============================================
+// TABLE SCHEMAS
+// =============================================
+
 const CodeHighlightSchema = {
   Row: _.publicCodeHighlightRowSchema,
   Insert: _.publicCodeHighlightInsertSchema,
@@ -24,8 +28,17 @@ const RepoSchema = {
 }
 type Repo = z.infer<typeof RepoSchema.Row>
 
-// Schema exports
-export { CodeHighlightSchema, CodeIssueSchema, RepoSchema }
+// =============================================
+// ENUM SCHEMAS
+// =============================================
 
-// Type exports
-export type { CodeHighlight, CodeIssue, Repo }
+const RepoStatusSchema = _.publicRepoStatusSchema
+type RepoStatus = z.infer<typeof RepoStatusSchema>
+
+// =============================================
+// EXPORTS
+// =============================================
+
+export { CodeHighlightSchema, CodeIssueSchema, RepoSchema, RepoStatusSchema }
+
+export type { CodeHighlight, CodeIssue, Repo, RepoStatus }

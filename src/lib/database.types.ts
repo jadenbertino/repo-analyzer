@@ -120,7 +120,7 @@ export type Database = {
           id: number
           name: string
           owner: string
-          status: string
+          status: Database["public"]["Enums"]["repo_status"]
           updated_at: string
           user_id: string
         }
@@ -129,7 +129,7 @@ export type Database = {
           id?: number
           name: string
           owner: string
-          status: string
+          status?: Database["public"]["Enums"]["repo_status"]
           updated_at?: string
           user_id: string
         }
@@ -138,7 +138,7 @@ export type Database = {
           id?: number
           name?: string
           owner?: string
-          status?: string
+          status?: Database["public"]["Enums"]["repo_status"]
           updated_at?: string
           user_id?: string
         }
@@ -152,7 +152,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      repo_status: "reviewing" | "bugs" | "healthy" | "error" | "archived"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -282,7 +282,9 @@ export const Constants = {
     Enums: {},
   },
   public: {
-    Enums: {},
+    Enums: {
+      repo_status: ["reviewing", "bugs", "healthy", "error", "archived"],
+    },
   },
 } as const
 

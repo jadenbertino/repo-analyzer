@@ -37,6 +37,9 @@ generate_structured_database() {
     # Extract table names from schema file
     local table_names=($(grep -oP 'export const public\K[A-Z][a-zA-Z]*(?=(?:Row|Insert|Update|Relationships)Schema)' "$schema_file" | sort -u))
     
+    # Extract enum names from schema file (schemas that don't end with Row|Insert|Update|Relationships)
+    local enum_names=($(grep -oP 'export const public\K[A-Z][a-zA-Z]*(?=Schema)' "$schema_file" | grep -vE '(Row|Insert|Update|Relationships)$' | sort -u))
+    
     # Check if we found any table names
     if [ ${#table_names[@]} -eq 0 ]; then
         echo "❌ [ERROR] No table names found in $schema_file" >&2
@@ -44,6 +47,9 @@ generate_structured_database() {
     fi
     
     log_info "Found ${#table_names[@]} tables: ${table_names[*]}"
+    if [ ${#enum_names[@]} -gt 0 ]; then
+        log_info "Found ${#enum_names[@]} enums: ${enum_names[*]}"
+    fi
     
     # Start building the output file
     cat > "$output_file" << 'EOF'
@@ -54,6 +60,11 @@ EOF
 
     # Generate schema objects for each table
     if [ ${#table_names[@]} -gt 0 ]; then
+        echo "// =============================================" >> "$output_file"
+        echo "// TABLE SCHEMAS" >> "$output_file"
+        echo "// =============================================" >> "$output_file"
+        echo "" >> "$output_file"
+        
         for table in "${table_names[@]}"; do
             local lower_table=$(echo "$table" | sed 's/\([A-Z]\)/_\L\1/g' | sed 's/^_//')
             
@@ -73,11 +84,30 @@ EOF
         done
     fi
     
+    # Generate enum schemas and types
+    if [ ${#enum_names[@]} -gt 0 ]; then
+        echo "// =============================================" >> "$output_file"
+        echo "// ENUM SCHEMAS" >> "$output_file"
+        echo "// =============================================" >> "$output_file"
+        echo "" >> "$output_file"
+        
+        for enum in "${enum_names[@]}"; do
+            echo "const ${enum}Schema = _.public${enum}Schema" >> "$output_file"
+            echo "type $enum = z.infer<typeof ${enum}Schema>" >> "$output_file"
+            echo "" >> "$output_file"
+        done
+    fi
+    
     # Generate exports
-    if [ ${#table_names[@]} -gt 0 ]; then
-        echo "// Schema exports" >> "$output_file"
+    if [ ${#table_names[@]} -gt 0 ] || [ ${#enum_names[@]} -gt 0 ]; then
+        echo "// =============================================" >> "$output_file"
+        echo "// EXPORTS" >> "$output_file"
+        echo "// =============================================" >> "$output_file"
+        echo "" >> "$output_file"
         echo -n "export { " >> "$output_file"
         local first=true
+        
+        # Export table schemas
         for table in "${table_names[@]}"; do
             if [ "$first" = true ]; then
                 echo -n "${table}Schema" >> "$output_file"
@@ -86,12 +116,24 @@ EOF
                 echo -n ", ${table}Schema" >> "$output_file"
             fi
         done
+        
+        # Export enum schemas
+        for enum in "${enum_names[@]}"; do
+            if [ "$first" = true ]; then
+                echo -n "${enum}Schema" >> "$output_file"
+                first=false
+            else
+                echo -n ", ${enum}Schema" >> "$output_file"
+            fi
+        done
+        
         echo " }" >> "$output_file"
         
         echo "" >> "$output_file"
-        echo "// Type exports" >> "$output_file"
         echo -n "export type { " >> "$output_file"
         first=true
+        
+        # Export table types
         for table in "${table_names[@]}"; do
             if [ "$first" = true ]; then
                 echo -n "$table" >> "$output_file"
@@ -100,6 +142,17 @@ EOF
                 echo -n ", $table" >> "$output_file"
             fi
         done
+        
+        # Export enum types
+        for enum in "${enum_names[@]}"; do
+            if [ "$first" = true ]; then
+                echo -n "$enum" >> "$output_file"
+                first=false
+            else
+                echo -n ", $enum" >> "$output_file"
+            fi
+        done
+        
         echo " }" >> "$output_file"
     else
         echo "// No tables found - empty exports" >> "$output_file"
@@ -107,7 +160,8 @@ EOF
         echo "export type {}" >> "$output_file"
     fi
     
-    log_success "Generated structured database.ts with schemas for: ${table_names[*]}"
+    local all_items=("${table_names[@]}" "${enum_names[@]}")
+    log_success "Generated structured database.ts with schemas for: ${all_items[*]}"
 }
 
 generate_structured_database

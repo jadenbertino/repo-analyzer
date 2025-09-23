@@ -7,6 +7,14 @@
 import { z } from "zod";
 import { type Json } from "./database.types";
 
+export const publicRepoStatusSchema = z.union([
+  z.literal("reviewing"),
+  z.literal("bugs"),
+  z.literal("healthy"),
+  z.literal("error"),
+  z.literal("archived"),
+]);
+
 export const jsonSchema: z.ZodSchema<Json> = z.lazy(() =>
   z
     .union([
@@ -108,7 +116,7 @@ export const publicRepoRowSchema = z.object({
   id: z.number(),
   name: z.string(),
   owner: z.string(),
-  status: z.string(),
+  status: publicRepoStatusSchema,
   updated_at: z.string(),
   user_id: z.string(),
 });
@@ -118,7 +126,7 @@ export const publicRepoInsertSchema = z.object({
   id: z.number().optional(),
   name: z.string(),
   owner: z.string(),
-  status: z.string(),
+  status: publicRepoStatusSchema.optional(),
   updated_at: z.string().optional(),
   user_id: z.string(),
 });
@@ -128,7 +136,7 @@ export const publicRepoUpdateSchema = z.object({
   id: z.number().optional(),
   name: z.string().optional(),
   owner: z.string().optional(),
-  status: z.string().optional(),
+  status: publicRepoStatusSchema.optional(),
   updated_at: z.string().optional(),
   user_id: z.string().optional(),
 });

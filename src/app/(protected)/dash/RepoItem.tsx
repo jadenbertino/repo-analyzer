@@ -1,27 +1,8 @@
-import { Repo } from '@/lib/database'
+import { Repo, RepoStatus } from '@/lib/database'
 import { cn } from '@/lib/utils'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { EllipsisVertical } from 'lucide-react'
 import { useMemo } from 'react'
-
-export type RepoStatus =
-  | 'Importing'
-  | 'Reviewing'
-  | 'Bugs'
-  | 'Healthy'
-  | 'Error'
-  | 'Archived'
-
-// export interface RepoItemType {
-//   id: number
-//   url: string
-//   owner: string
-//   name: string
-//   owner_name: string
-//   user_id: string
-//   status: RepoStatus
-//   updated_at: string
-// }
 
 export default function RepoItem({ repo }: { repo: Repo }) {
   return (
@@ -93,16 +74,16 @@ export default function RepoItem({ repo }: { repo: Repo }) {
 function RepoStatusBadge({ status }: { status: string }) {
   const statusStyles: Record<RepoStatus, string> = useMemo(
     () => ({
-      Importing:
-        'bg-blue-50 text-blue-700 inset-ring-blue-600/20 dark:bg-blue-400/10 dark:text-blue-400 dark:inset-ring-blue-500/20',
-      Reviewing:
+      // Importing:
+      // 'bg-blue-50 text-blue-700 inset-ring-blue-600/20 dark:bg-blue-400/10 dark:text-blue-400 dark:inset-ring-blue-500/20',
+      reviewing:
         'bg-orange-50 text-orange-700 inset-ring-orange-600/20 dark:bg-orange-400/10 dark:text-orange-400 dark:inset-ring-orange-500/20',
-      Bugs: 'bg-red-50 text-red-700 inset-ring-red-600/20 dark:bg-red-400/10 dark:text-red-400 dark:inset-ring-red-500/20',
-      Healthy:
+      bugs: 'bg-red-50 text-red-700 inset-ring-red-600/20 dark:bg-red-400/10 dark:text-red-400 dark:inset-ring-red-500/20',
+      healthy:
         'bg-green-50 text-green-700 inset-ring-green-600/20 dark:bg-green-400/10 dark:text-green-400 dark:inset-ring-green-500/20',
-      Error:
+      error:
         'bg-red-50 text-red-700 inset-ring-red-600/20 dark:bg-red-400/10 dark:text-red-400 dark:inset-ring-red-500/20',
-      Archived:
+      archived:
         'bg-yellow-50 text-yellow-800 inset-ring-yellow-600/20 dark:bg-yellow-400/10 dark:text-yellow-500 dark:inset-ring-yellow-400/20',
     }),
     [],
