@@ -4,33 +4,22 @@ set -euo pipefail
 source "$(dirname "$0")/logger.sh"
 
 log_info "Ensuring local Supabase is running…"
-supabase status >/dev/null 2>&1 || supabase start >/dev/null 2>&1
+if ! supabase status >/dev/null 2>&1; then
+    supabase start
+    log_info "Started local Supabase instance"
+fi
 
 log_info "Resetting local DB from migrations…"
-supabase db reset   # drops, replays migrations, runs seed if present
-
-log_info "Checking upstream migration history…"
-UPSTREAM_MIGRATIONS_BEFORE=$(supabase migration list 2>/dev/null || echo "")
+supabase db reset # drops, replays migrations, runs seed if present
 
 log_info "Pulling remote schema diff (updates local migration history)…"
-# https://supabase.com/docs/reference/cli/supabase-db-pull
-echo "y" | supabase db pull -p $SUPABASE_DB_PASSWORD
+FILENAME="remote_changes"
+supabase db diff --linked -f $FILENAME
 
-log_info "Checking upstream migration history again…"
-UPSTREAM_MIGRATIONS_AFTER=$(supabase migration list 2>/dev/null || echo "")
-
-# Check if remote migration history was updated
-if [ "$UPSTREAM_MIGRATIONS_BEFORE" != "$UPSTREAM_MIGRATIONS_AFTER" ]; then
-    log_warn ""
-    log_warn "🔄 Upstream migration history has changed!"
-    log_warn ""
-    log_warn "Next steps:"
-    log_warn "  1. sb migration up — Applies the migration file to your local DB"
-    log_warn ""
-    log_warn "  2. If you did not get a 'Update remote migration history table -> Y'"
-    log_warn "     then you must run:"
-    log_warn "     sb migration repair <migrationTimestamp> --status applied"
-    log_warn ""
-else
-    echo "✅ Upstream migration history unchanged"
+# Check if a migration file was created with the filename pattern
+if ls supabase/migrations/*$FILENAME* 1> /dev/null 2>&1; then
+    log_info "Migration file detected with pattern '$FILENAME'. Resetting DB again…"
+    bash ./scripts/clean-migrations.sh
+    supabase db reset
+    echo "⚠️  A migration file containing '$FILENAME' was created. Please review and commit this file to your repository."
 fi
