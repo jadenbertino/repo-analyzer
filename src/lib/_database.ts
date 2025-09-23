@@ -118,6 +118,7 @@ export const publicRepoRowSchema = z.object({
   owner: z.string(),
   status: publicRepoStatusSchema,
   updated_at: z.string(),
+  url: z.string(),
   user_id: z.string(),
 });
 
@@ -128,6 +129,7 @@ export const publicRepoInsertSchema = z.object({
   owner: z.string(),
   status: publicRepoStatusSchema.optional(),
   updated_at: z.string().optional(),
+  url: z.string(),
   user_id: z.string(),
 });
 
@@ -138,5 +140,6 @@ export const publicRepoUpdateSchema = z.object({
   owner: z.string().optional(),
   status: publicRepoStatusSchema.optional(),
   updated_at: z.string().optional(),
+  url: z.string().optional(),
   user_id: z.string().optional(),
 });

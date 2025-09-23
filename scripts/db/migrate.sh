@@ -17,8 +17,10 @@ fi
 
 log_debug "Diffing local DB with remote DB to create migration file"
 supabase db diff -f $FILENAME
-bash scripts/db/clean.sh
 log_success "Created migration file: $FILENAME"
+
+# log_debug "Cleaning migration file"
+# bash scripts/db/clean.sh
 
 log_info "Resetting local DB from migrations to verify migration integrity"
 supabase db reset

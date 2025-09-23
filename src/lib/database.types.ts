@@ -122,6 +122,7 @@ export type Database = {
           owner: string
           status: Database["public"]["Enums"]["repo_status"]
           updated_at: string
+          url: string
           user_id: string
         }
         Insert: {
@@ -131,6 +132,7 @@ export type Database = {
           owner: string
           status?: Database["public"]["Enums"]["repo_status"]
           updated_at?: string
+          url: string
           user_id: string
         }
         Update: {
@@ -140,6 +142,7 @@ export type Database = {
           owner?: string
           status?: Database["public"]["Enums"]["repo_status"]
           updated_at?: string
+          url?: string
           user_id?: string
         }
         Relationships: []
