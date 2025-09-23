@@ -4,20 +4,20 @@ set -euo pipefail
 source "$(dirname "$0")/logger.sh"
 
 log_info "Ensuring local Supabase is running…"
-npx supabase status >/dev/null 2>&1 || npx supabase start >/dev/null 2>&1
+supabase status >/dev/null 2>&1 || supabase start >/dev/null 2>&1
 
 log_info "Resetting local DB from migrations…"
-npx supabase db reset   # drops, replays migrations, runs seed if present
+supabase db reset   # drops, replays migrations, runs seed if present
 
 log_info "Checking upstream migration history…"
-UPSTREAM_MIGRATIONS_BEFORE=$(npx supabase migration list 2>/dev/null || echo "")
+UPSTREAM_MIGRATIONS_BEFORE=$(supabase migration list 2>/dev/null || echo "")
 
 log_info "Pulling remote schema diff (updates local migration history)…"
 # https://supabase.com/docs/reference/cli/supabase-db-pull
-echo "y" | npx supabase db pull -p $SUPABASE_DB_PASSWORD
+echo "y" | supabase db pull -p $SUPABASE_DB_PASSWORD
 
 log_info "Checking upstream migration history again…"
-UPSTREAM_MIGRATIONS_AFTER=$(npx supabase migration list 2>/dev/null || echo "")
+UPSTREAM_MIGRATIONS_AFTER=$(supabase migration list 2>/dev/null || echo "")
 
 # Check if remote migration history was updated
 if [ "$UPSTREAM_MIGRATIONS_BEFORE" != "$UPSTREAM_MIGRATIONS_AFTER" ]; then
