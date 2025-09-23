@@ -21,7 +21,7 @@ if ! pnpm dlx supazod \
   -o $SCHEMA_FILEPATH \
   -s public \
   --table-operation-pattern "{table}{operation}" \
-  --capitalize-names true; then
+  --capitalize-names true > /dev/null; then
     echo "❌ [ERROR] Failed to generate Zod schemas" >&2
     exit 1
 fi

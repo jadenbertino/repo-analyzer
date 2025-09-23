@@ -14,3 +14,7 @@ log_success "Created migration file: $FILENAME"
 
 log_info "Resetting local DB from migrations to verify migration integrity"
 supabase db reset
+log_success "Migration files verified"
+
+# Update types & schemas
+bash scripts/db/types.sh
