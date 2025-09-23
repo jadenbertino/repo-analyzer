@@ -6,8 +6,8 @@ import { Nav } from './Nav'
 import RepoItem from './RepoItem'
 
 const DashPage = () => {
-  const { user } = useAuthContext()
-  const { data: repos, isLoading } = useRepos({
+  const { user, isLoading: authLoading } = useAuthContext()
+  const { data: repos, isLoading: reposLoading } = useRepos({
     userId: user?.id,
     skip: 0,
     limit: 10,
@@ -21,7 +21,7 @@ const DashPage = () => {
           role='list'
           className='divide-y divide-gray-100 dark:divide-white/5'
         >
-          {isLoading
+          {authLoading || reposLoading
             ? 'loading'
             : repos?.length
               ? repos.map((project) => (
