@@ -11,7 +11,12 @@ const CodeHighlightSchema = {
   Update: _.publicCodeHighlightUpdateSchema,
   Relationships: _.publicCodeHighlightRelationshipsSchema,
 }
-type CodeHighlight = z.infer<typeof CodeHighlightSchema.Row>
+type CodeHighlightRow = z.infer<typeof CodeHighlightSchema.Row>
+type CodeHighlightInsert = z.infer<typeof CodeHighlightSchema.Insert>
+type CodeHighlightUpdate = z.infer<typeof CodeHighlightSchema.Update>
+type CodeHighlightRelationships = z.infer<
+  typeof CodeHighlightSchema.Relationships
+>
 
 const CodeIssueSchema = {
   Row: _.publicCodeIssueRowSchema,
@@ -19,14 +24,19 @@ const CodeIssueSchema = {
   Update: _.publicCodeIssueUpdateSchema,
   Relationships: _.publicCodeIssueRelationshipsSchema,
 }
-type CodeIssue = z.infer<typeof CodeIssueSchema.Row>
+type CodeIssueRow = z.infer<typeof CodeIssueSchema.Row>
+type CodeIssueInsert = z.infer<typeof CodeIssueSchema.Insert>
+type CodeIssueUpdate = z.infer<typeof CodeIssueSchema.Update>
+type CodeIssueRelationships = z.infer<typeof CodeIssueSchema.Relationships>
 
 const RepoSchema = {
   Row: _.publicRepoRowSchema,
   Insert: _.publicRepoInsertSchema,
   Update: _.publicRepoUpdateSchema,
 }
-type Repo = z.infer<typeof RepoSchema.Row>
+type RepoRow = z.infer<typeof RepoSchema.Row>
+type RepoInsert = z.infer<typeof RepoSchema.Insert>
+type RepoUpdate = z.infer<typeof RepoSchema.Update>
 
 // =============================================
 // ENUM SCHEMAS
@@ -40,5 +50,17 @@ type RepoStatus = z.infer<typeof RepoStatusSchema>
 // =============================================
 
 export { CodeHighlightSchema, CodeIssueSchema, RepoSchema, RepoStatusSchema }
-
-export type { CodeHighlight, CodeIssue, Repo, RepoStatus }
+export type {
+  CodeHighlightRow,
+  CodeHighlightInsert,
+  CodeHighlightUpdate,
+  CodeHighlightRelationships,
+  CodeIssueRow,
+  CodeIssueInsert,
+  CodeIssueUpdate,
+  CodeIssueRelationships,
+  RepoRow,
+  RepoInsert,
+  RepoUpdate,
+  RepoStatus,
+}

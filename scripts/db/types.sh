@@ -79,7 +79,17 @@ EOF
             fi
             
             echo "}" >> "$output_file"
-            echo "type $table = z.infer<typeof ${table}Schema.Row>" >> "$output_file"
+            
+            # Generate individual types for each operation
+            echo "type ${table}Row = z.infer<typeof ${table}Schema.Row>" >> "$output_file"
+            echo "type ${table}Insert = z.infer<typeof ${table}Schema.Insert>" >> "$output_file"
+            echo "type ${table}Update = z.infer<typeof ${table}Schema.Update>" >> "$output_file"
+            
+            # Check if relationships schema exists and generate type for it
+            if grep -q "public${table}RelationshipsSchema" "$schema_file"; then
+                echo "type ${table}Relationships = z.infer<typeof ${table}Schema.Relationships>" >> "$output_file"
+            fi
+            
             echo "" >> "$output_file"
         done
     fi
@@ -128,18 +138,28 @@ EOF
         done
         
         echo " }" >> "$output_file"
-        
-        echo "" >> "$output_file"
         echo -n "export type { " >> "$output_file"
         first=true
         
-        # Export table types
+        # Export table types (individual operation types)
         for table in "${table_names[@]}"; do
+            # Export Row type
             if [ "$first" = true ]; then
-                echo -n "$table" >> "$output_file"
+                echo -n "${table}Row" >> "$output_file"
                 first=false
             else
-                echo -n ", $table" >> "$output_file"
+                echo -n ", ${table}Row" >> "$output_file"
+            fi
+            
+            # Export Insert type
+            echo -n ", ${table}Insert" >> "$output_file"
+            
+            # Export Update type
+            echo -n ", ${table}Update" >> "$output_file"
+            
+            # Export Relationships type if it exists
+            if grep -q "public${table}RelationshipsSchema" "$schema_file"; then
+                echo -n ", ${table}Relationships" >> "$output_file"
             fi
         done
         
@@ -160,8 +180,25 @@ EOF
         echo "export type {}" >> "$output_file"
     fi
     
-    local all_items=("${table_names[@]}" "${enum_names[@]}")
-    log_success "Generated structured database.ts with schemas for: ${all_items[*]}"
+    # Build list of all generated types
+    local all_types=()
+    for table in "${table_names[@]}"; do
+        all_types+=("${table}Row" "${table}Insert" "${table}Update")
+        if grep -q "public${table}RelationshipsSchema" "$schema_file"; then
+            all_types+=("${table}Relationships")
+        fi
+    done
+    all_types+=("${enum_names[@]}")
+    
+    log_success "Generated structured database.ts with individual operation types for: ${all_types[*]}"
+    
+    # Format with prettier
+    log_info "Formatting database.ts with prettier..."
+    if ! pnpm dlx prettier --write "$output_file" > /dev/null 2>&1; then
+        echo "⚠️  [WARNING] Failed to format with prettier, but file was generated successfully" >&2
+    else
+        log_success "Formatted database.ts with prettier"
+    fi
 }
 
 generate_structured_database
