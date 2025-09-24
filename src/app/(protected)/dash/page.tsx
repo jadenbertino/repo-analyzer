@@ -1,6 +1,7 @@
 'use client'
 
 import Modal from '@/components/Modal'
+import { Button } from '@/components/ui/button'
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -62,12 +63,7 @@ const DashPage = () => {
       <Nav title='Repos' />
       <main>
         <div className='mb-6'>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className='rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400'
-          >
-            + Create
-          </button>
+          <Button onClick={() => setIsModalOpen(true)}>+ Create</Button>
         </div>
 
         <ul
@@ -140,22 +136,20 @@ const DashPage = () => {
           </div>
 
           <div className='mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end'>
-            <button
+            <Button
               type='button'
               onClick={() => setIsModalOpen(false)}
-              className='inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:hover:bg-gray-600'
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type='submit'
               disabled={createRepoMutation.isPending}
-              className='inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed dark:bg-indigo-500 dark:hover:bg-indigo-400'
             >
               {createRepoMutation.isPending
                 ? 'Creating...'
                 : 'Create Repository'}
-            </button>
+            </Button>
           </div>
         </form>
       </Modal>
