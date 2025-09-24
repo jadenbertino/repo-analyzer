@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/clients/browser'
-import { Repo } from '@/lib/database'
+import { RepoInsert, RepoRow } from '@/lib/database'
 
 type RepoQueryParams = {
   userId: string | undefined
@@ -7,7 +7,7 @@ type RepoQueryParams = {
   limit: number
 }
 
-async function getRepos(q: RepoQueryParams): Promise<Repo[]> {
+async function getRepos(q: RepoQueryParams): Promise<RepoRow[]> {
   if (!q.userId) {
     throw new Error('userId is required')
   }
@@ -22,5 +22,19 @@ async function getRepos(q: RepoQueryParams): Promise<Repo[]> {
   return data
 }
 
-export { getRepos }
-export type { RepoQueryParams }
+async function createRepo(params: RepoInsert): Promise<RepoRow> {
+  const { data, error } = await supabase
+    .from('repo')
+    .insert(params)
+    .select()
+    .single()
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data
+}
+
+export { createRepo, getRepos }
+export type { RepoInsert, RepoQueryParams }

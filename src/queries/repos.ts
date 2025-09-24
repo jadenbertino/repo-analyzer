@@ -1,5 +1,10 @@
-import { getRepos, RepoQueryParams } from '@/app/api/repo/client'
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { createRepo, getRepos, RepoQueryParams } from '@/app/api/repo/client'
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 
 const QUERY_KEYS = {
   all: ['repos'],
@@ -23,4 +28,18 @@ const useRepos = (q: RepoQueryParams) => {
   return useQuery(QUERY_OPTIONS.byUserId(q))
 }
 
-export { useRepos }
+const useCreateRepo = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: createRepo,
+    onSuccess: () => {
+      // Invalidate repos queries to refetch the list
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.all,
+      })
+    },
+  })
+}
+
+export { useCreateRepo, useRepos }
