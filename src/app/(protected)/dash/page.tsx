@@ -1,7 +1,8 @@
 'use client'
 
-import Input from '@/components/Input'
 import Modal from '@/components/Modal'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import { useCreateRepo, useRepos } from '@/queries/repos'
 import { DialogTitle } from '@headlessui/react'
@@ -105,38 +106,44 @@ const DashPage = () => {
                 onSubmit={handleFormSubmit}
                 className='space-y-4'
               >
-                <Input
-                  id='name'
-                  name='name'
-                  label='Repository Name'
-                  type='text'
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                  placeholder='my-awesome-repo'
-                />
+                <div className='space-y-2'>
+                  <Label htmlFor='name'>Repository Name</Label>
+                  <Input
+                    id='name'
+                    name='name'
+                    type='text'
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    placeholder='my-awesome-repo'
+                  />
+                </div>
 
-                <Input
-                  id='owner'
-                  name='owner'
-                  label='Owner'
-                  type='text'
-                  value={formData.owner}
-                  onChange={handleInputChange}
-                  required
-                  placeholder='username or organization'
-                />
+                <div className='space-y-2'>
+                  <Label htmlFor='owner'>Owner</Label>
+                  <Input
+                    id='owner'
+                    name='owner'
+                    type='text'
+                    value={formData.owner}
+                    onChange={handleInputChange}
+                    required
+                    placeholder='username or organization'
+                  />
+                </div>
 
-                <Input
-                  id='url'
-                  name='url'
-                  label='Repository URL'
-                  type='url'
-                  value={formData.url}
-                  onChange={handleInputChange}
-                  required
-                  placeholder='https://github.com/owner/repo'
-                />
+                <div className='space-y-2'>
+                  <Label htmlFor='url'>Repository URL</Label>
+                  <Input
+                    id='url'
+                    name='url'
+                    type='url'
+                    value={formData.url}
+                    onChange={handleInputChange}
+                    required
+                    placeholder='https://github.com/owner/repo'
+                  />
+                </div>
 
                 <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
                   <button
