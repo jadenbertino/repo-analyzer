@@ -1,11 +1,11 @@
 'use client'
 
 import Modal from '@/components/Modal'
+import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import { useCreateRepo, useRepos } from '@/queries/repos'
-import { DialogTitle } from '@headlessui/react'
 import { useState } from 'react'
 import { Nav } from './Nav'
 import RepoItem from './RepoItem'
@@ -93,80 +93,71 @@ const DashPage = () => {
         open={isModalOpen}
         onClose={setIsModalOpen}
       >
-        <div className='sm:flex sm:items-start'>
-          <div className='mt-3 text-center sm:mt-0 sm:text-left w-full'>
-            <DialogTitle
-              as='h3'
-              className='text-base font-semibold text-gray-900 dark:text-white'
-            >
-              Create New Repository
-            </DialogTitle>
-            <div className='mt-4'>
-              <form
-                onSubmit={handleFormSubmit}
-                className='space-y-4'
-              >
-                <div className='space-y-2'>
-                  <Label htmlFor='name'>Repository Name</Label>
-                  <Input
-                    id='name'
-                    name='name'
-                    type='text'
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    placeholder='my-awesome-repo'
-                  />
-                </div>
-
-                <div className='space-y-2'>
-                  <Label htmlFor='owner'>Owner</Label>
-                  <Input
-                    id='owner'
-                    name='owner'
-                    type='text'
-                    value={formData.owner}
-                    onChange={handleInputChange}
-                    required
-                    placeholder='username or organization'
-                  />
-                </div>
-
-                <div className='space-y-2'>
-                  <Label htmlFor='url'>Repository URL</Label>
-                  <Input
-                    id='url'
-                    name='url'
-                    type='url'
-                    value={formData.url}
-                    onChange={handleInputChange}
-                    required
-                    placeholder='https://github.com/owner/repo'
-                  />
-                </div>
-
-                <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-                  <button
-                    type='submit'
-                    disabled={createRepoMutation.isPending}
-                    className='inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed dark:bg-indigo-500 dark:hover:bg-indigo-400'
-                  >
-                    {createRepoMutation.isPending
-                      ? 'Creating...'
-                      : 'Create Repository'}
-                  </button>
-                  <button
-                    type='button'
-                    onClick={() => setIsModalOpen(false)}
-                    className='mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:hover:bg-gray-600'
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
+        <DialogHeader>
+          <DialogTitle>Create New Repository</DialogTitle>
+        </DialogHeader>
+        <form
+          onSubmit={handleFormSubmit}
+          className='space-y-4'
+        >
+          <div className='space-y-2'>
+            <Label htmlFor='name'>Repository Name</Label>
+            <Input
+              id='name'
+              name='name'
+              type='text'
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+              placeholder='my-awesome-repo'
+            />
           </div>
-        </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='owner'>Owner</Label>
+            <Input
+              id='owner'
+              name='owner'
+              type='text'
+              value={formData.owner}
+              onChange={handleInputChange}
+              required
+              placeholder='username or organization'
+            />
+          </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='url'>Repository URL</Label>
+            <Input
+              id='url'
+              name='url'
+              type='url'
+              value={formData.url}
+              onChange={handleInputChange}
+              required
+              placeholder='https://github.com/owner/repo'
+            />
+          </div>
+
+          <div className='mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end'>
+            <button
+              type='button'
+              onClick={() => setIsModalOpen(false)}
+              className='inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto dark:bg-gray-700 dark:text-white dark:ring-gray-600 dark:hover:bg-gray-600'
+            >
+              Cancel
+            </button>
+            <button
+              type='submit'
+              disabled={createRepoMutation.isPending}
+              className='inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed dark:bg-indigo-500 dark:hover:bg-indigo-400'
+            >
+              {createRepoMutation.isPending
+                ? 'Creating...'
+                : 'Create Repository'}
+            </button>
+          </div>
+        </form>
       </Modal>
     </div>
   )
