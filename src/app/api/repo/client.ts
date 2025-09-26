@@ -36,5 +36,12 @@ async function createRepo(params: RepoInsert): Promise<RepoRow> {
   return data
 }
 
-export { createRepo, getRepos }
+async function deleteRepo(id: number): Promise<void> {
+  const { error } = await supabase.from('repo').delete().eq('id', id)
+  if (error) {
+    throw error
+  }
+}
+
+export { createRepo, deleteRepo, getRepos }
 export type { RepoInsert, RepoQueryParams }

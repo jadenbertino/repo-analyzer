@@ -8,9 +8,9 @@ if [ ! command -v doppler &> /dev/null ]; then
 fi
 
 # Determine environment, throw if not set
-if [ -z "$ENVIRONMENT" ]; then
-  echo "❌ ENVIRONMENT not set"
-  exit 1
+if [ -z "${ENVIRONMENT-}" ]; then
+  ENVIRONMENT="development"
+  echo "ℹ️  ENVIRONMENT not set, defaulting to 'development'"
 fi
 
 # Check if env file exists

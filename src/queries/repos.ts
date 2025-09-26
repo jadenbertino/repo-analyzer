@@ -1,10 +1,11 @@
-import { createRepo, getRepos, RepoQueryParams } from '@/app/api/repo/client'
 import {
-  queryOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query'
+  createRepo,
+  deleteRepo,
+  getRepos,
+  RepoQueryParams,
+} from '@/app/api/repo/client'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 const QUERY_KEYS = {
   all: ['repos'],
@@ -15,17 +16,12 @@ const QUERY_KEYS = {
   ],
 } as const
 
-const QUERY_OPTIONS = {
-  byUserId: (q: RepoQueryParams) =>
-    queryOptions({
-      queryKey: QUERY_KEYS.byUserId(q),
-      queryFn: () => getRepos(q),
-      enabled: !!q.userId,
-    }),
-}
-
 const useRepos = (q: RepoQueryParams) => {
-  return useQuery(QUERY_OPTIONS.byUserId(q))
+  return useQuery({
+    queryKey: QUERY_KEYS.byUserId(q),
+    queryFn: () => getRepos(q),
+    enabled: !!q.userId,
+  })
 }
 
 const useCreateRepo = () => {
@@ -42,4 +38,21 @@ const useCreateRepo = () => {
   })
 }
 
-export { useCreateRepo, useRepos }
+const useDeleteRepo = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: deleteRepo,
+    onSuccess: () => {
+      // Invalidate repos queries to refetch the list
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.all,
+      })
+      toast.success('Repository deleted successfully')
+    },
+    onError: (error) => {
+      toast.error(`Failed to delete repository: ${error.message}`)
+    },
+  })
+}
+
+export { useCreateRepo, useDeleteRepo, useRepos }

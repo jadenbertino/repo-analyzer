@@ -1,10 +1,17 @@
-import { Repo, RepoStatus } from '@/lib/database'
+import { RepoRow, RepoStatus } from '@/lib/database'
 import { cn } from '@/lib/utils'
+import { useDeleteRepo } from '@/queries/repos'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { EllipsisVertical } from 'lucide-react'
+import { EllipsisVertical, Loader2 } from 'lucide-react'
 import { useMemo } from 'react'
 
-export default function RepoItem({ repo }: { repo: Repo }) {
+export default function RepoItem({ repo }: { repo: RepoRow }) {
+  const deleteRepoMutation = useDeleteRepo()
+
+  const handleDelete = () => {
+    deleteRepoMutation.mutate(repo.id)
+  }
+
   return (
     <div className='flex items-center justify-between gap-x-6 py-5'>
       <div className='min-w-0'>
@@ -57,12 +64,16 @@ export default function RepoItem({ repo }: { repo: Repo }) {
             className='absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg outline-1 outline-gray-900/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10'
           >
             <MenuItem as='div'>
-              <a
-                href='#'
-                className='block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden dark:text-white dark:data-focus:bg-white/5'
+              <button
+                onClick={handleDelete}
+                disabled={deleteRepoMutation.isPending}
+                className='flex w-full items-center gap-2 px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden disabled:opacity-50 disabled:cursor-not-allowed dark:text-white dark:data-focus:bg-white/5'
               >
+                {deleteRepoMutation.isPending ? (
+                  <Loader2 className='size-3 animate-spin' />
+                ) : null}
                 Delete<span className='sr-only'>, {repo.name}</span>
-              </a>
+              </button>
             </MenuItem>
           </MenuItems>
         </Menu>
